@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipt Managment App</title>
+    <link rel="stylesheet" href="styles/ReceiptManagment.css">
+    <link href="styles/bootstrap.min.css" rel="stylesheet">
+    <script src="scripts/jquery.min.js"></script>
+    <script src="scripts/bootstrap.min.js"></script>
+</head>
+<body>
+    <div id="header">
+        <h1 id="pageTitle">Receipt Managment</h1>
+        <button class="btn btn-primary" id="addReceiptButton" onclick="onAddReceiptClick()">Add Receipt</button>
+
+    </div>
+    <div class="container " id="tableContainer">
+        <table class="table" id="receiptTable">
+            <tr>
+                <th class="col-2">Invoice Number</th>
+                <th class="col-2">Client Name</th>
+                <th class="col-1">Date</th>
+                <th class="col-1">Amount</th>
+                <th class="col-1">Status</th>
+                <th class="col-1">Products</th>
+                <th class="col-2">Edit</th>
+                <th class="col-2">Delete</th>
+
+            </tr>
+        </table>
+    </div>
+    <div class="modal-dialog visually-hidden" id="receiptDialog">
+        <div class="modal-content" id="dialog-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Receipt</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="onCloseClick()"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="dialogInvoiceNumber" class="form-label">Invoice Number</label>
+                        <input type="text" class="form-control" id="dialogInvoiceNumber" placeholder="Invoice Number">
+                    </div>
+                    <div class="mb-3">
+                        <label for="dialogClientName" class="form-label">Client Name</label>
+                        <input type="text" class="form-control" id="dialogClientName" placeholder="Client Name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="dialogDate" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="dialogDate" placeholder="Date">
+                    </div>
+                    <div class="mb-3">
+                        <label for="dialogAmount" class="form-label">Amount</label>
+                        <input type="number" class="form-control" id="dialogAmount" placeholder="Amount">
+                    </div>
+                    <div class="mb-3">
+                        <label for="dialogStatus" class="form-label">Status</label>
+                        <select class="form-select" id="dialogStatus">
+                            <option value="Paid">Paid</option>
+                            <option value="Unpaid">Unpaid</option>
+                            <option value="Cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="dialogProduct" class="form-label">Product</label>
+                        <!-- <input type="" class="form-control" id="dialogProduct" placeholder="Product"> -->
+                        <select id="dialogProduct" class="form-select">
+                            <option>1</option>
+                            <option>2</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer" id="dialogFooter">
+                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" onclick="onCloseClick()">Close</button>
+                <button type="button" class="btn btn-outline-primary" onclick="onSaveChangesClick()">Save changes</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="scripts/ReceiptManagment.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,127 @@
+body {
+    margin: 0px;
+    font-family: Vazir;
+    background-color: rgb(246, 246, 246) !important;
+    width: 100vw;
+    height: 100vh;
+    padding: 40px
+}
+
+#header {
+    display: flex;
+    /* justify-content: space-between; */
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+#pageTitle {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+#addReceiptButton {
+    margin-left: auto;
+    margin-right: 20px;
+    display: block;
+}
+
+#tableContainer {
+    padding: 20px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    height: 80vh;
+    width: 100%;
+    overflow-x: auto;
+}
+
+#receiptTable {
+    /* margin-left: auto; */
+    /* margin-right: auto; */
+    display: block;
+    width: 100%;
+}
+
+#receiptDialog {
+    /* display: flex; */
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    /* width: 100vw;
+    height: 100vh; */
+    background-color: rgba(192, 192, 192, 0.514);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 140px;
+    padding-left: 300px;
+    padding-right: 300px;
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+#dialog-content {
+    background-color: white;
+    border-radius: 20px;
+}
+
+@media (max-width: 1000px) {
+
+
+    #receiptDialog {
+        padding: 100px;
+    }
+}
+@media (max-width: 500px){
+    #receiptDialog{
+        padding: 0px;
+        border-radius: 0px;
+
+    }
+    #dialog-content{
+        height: 100vh;
+    }
+}
+
+
+@media (max-height: 500px){
+    @media (orientation: landscape) {
+            /* body{
+                overflow-y: auto;
+            } */
+            #receiptDialog {
+                overflow-y: scroll;
+                /* width: fit-content; */
+                height: fit-content;
+                max-height: 100vh;
+                padding: 0px;
+            }
+            #dialog-content{
+                border-radius: 0px;
+            }
+        }
+}
+
+#dialogFooter .btn-outline-danger{
+    margin-right: 10px;
+}
+
+
+.modal-header .modal-title{
+    font-size: 30px;
+    margin-left: auto;
+}
+
+
+
+.form-control:hover{
+    box-shadow: 1px 1px 0px 0px rgba(0, 0, 0, 0.486) ;
+
+}
