@@ -1,5 +1,6 @@
 class Receipt {
-    constructor(invoiceNumber, clientName, date, amount, status, product) {
+    constructor(id,invoiceNumber, clientName, date, amount, status, product) {
+        this.id = id;
         this.invoiceNumber = invoiceNumber;
         this.clientName = clientName;
         this.date = date;
@@ -31,6 +32,7 @@ let localReceipts = [];
 const receiptTable = document.getElementById("receiptTable");
 const dialog = document.getElementById("receiptDialog");
 const dialogProducts = document.getElementById("dialogProduct");
+const resetFields =  document.querySelectorAll(".reset-control");
 
 // function $ (query){
 //     return document.querySelector(query)
@@ -40,7 +42,7 @@ function onStart() {
     for (let product of Products) {
         dialogProducts.innerHTML += `<option>${product}</option>`;
     }
-
+    RenderReceiptTable()
     getDataFromServer();
 }
 
@@ -77,15 +79,15 @@ function RenderReceiptTable() {
         for (let receipt of arguments) {
             if (receipt != undefined || receipt != null) {
                 let tableElement = `
-                    <tr>
+                    <tr id="${receipt.id}">
                         <td>${receipt.invoiceNumber}</td>
                         <td>${receipt.clientName}</td>
                         <td>${receipt.date}</td>
                         <td>${receipt.amount}</td>
                         <td>${receipt.status}</td>
                         <td>${receipt.product}</td>
-                        <td><button class="btn btn-primary">Edit</button></td>
-                        <td><button class="btn btn-primary">Delete</button></td>
+                        <td><button class="btn btn-primary" onclick="editReceipt('${receipt.id}')">Edit</button></td>
+                        <td><button class="btn btn-primary" onclick="deleteReceipt('${receipt.id}')">Delete</button></td>
                     </tr>
                     `;
                 receiptTable.innerHTML += tableElement;
@@ -95,35 +97,100 @@ function RenderReceiptTable() {
 }
 
 function addReceipt(receiptNumber, clientName, date, amount, status, product) {
+    let id = crypto.randomUUID().substring(0, 8);
+    console.log(id)
     localReceipts.push(
-        new Receipt(receiptNumber, clientName, date, amount, status, product),
+        new Receipt(id,receiptNumber, clientName, date, amount, status, product),
     );
     sendDataToServer();
     RenderReceiptTable(...localReceipts);
 }
-
-//Dialog functions
-
-function onAddReceiptClick() {
-    dialog.classList.remove("visually-hidden");
+function deleteReceipt(id){
+    let result = localReceipts.filter(receipt => receipt.id != id);
+    localReceipts = result
+    sendDataToServer()
+    RenderReceiptTable(...localReceipts)
+    console.log(localReceipts)
 }
 
-function onSaveChangesClick() {
+function editReceipt(receiptId){
+    console.log(receiptId)
+    let receipt = localReceipts.filter(receipt => receipt.id == receiptId)[0]
+    console.log(receipt)
+    setDialogValues(receipt , "Edit Receipt");
+    dialog.classList.remove("visually-hidden");
+
+    
+}
+
+function setDialogValues(receipt , title){
+    if (receipt != null || receipt != undefined) {
+        document.getElementById("receiptDialog").dataset.id = receipt.id;
+        document.getElementById("dialogSaveButton").setAttribute("onclick", "onSaveChangesClick('" + receipt.id + "')");   
+        document.getElementById("dialogInvoiceNumber").value = receipt.invoiceNumber;
+        document.getElementById("dialogClientName").value = receipt.clientName;
+        document.getElementById("dialogDate").value = receipt.date;
+        document.getElementById("dialogAmount").value = receipt.amount;
+        document.getElementById("dialogStatus").value = receipt.status;
+        document.getElementById("dialogProduct").value = receipt.product;
+    }
+    if(title != null || title != undefined){
+        document.getElementById("dialogTitle").innerHTML = title;
+    }
+
+}
+
+function getDialogValues(){
     let invoiceNumber = document.getElementById("dialogInvoiceNumber").value;
     let clientName = document.getElementById("dialogClientName").value;
     let date = document.getElementById("dialogDate").value;
     let amount = document.getElementById("dialogAmount").value;
     let status = document.getElementById("dialogStatus").value;
     let product = document.getElementById("dialogProduct").value;
+    return new Receipt(null,invoiceNumber, clientName, date, amount, status, product);
+}
 
-    console.log(invoiceNumber, clientName, date, amount, status, product);
 
-    addReceipt(invoiceNumber, clientName, date, amount, status, product);
+//Dialog functions
+
+function onAddReceiptClick() {
+    resetFields.forEach(input => {
+        input.addEventListener("focus" , function handler (){
+            input.value = "";
+            input.removeEventListener("focus" , handler)
+        })
+    })
+    setDialogValues(null, "Add Receipt");
+    dialog.classList.remove("visually-hidden");
+}
+
+function onSaveChangesClick() {
+    let receipt = getDialogValues();
+
+    if (arguments.length != 0) {
+        let id = arguments[0];
+        let editedReceipt = localReceipts.filter(receipt => receipt.id == id)[0];
+        editedReceipt.invoiceNumber = receipt.invoiceNumber;
+        editedReceipt.clientName = receipt.clientName;
+        editedReceipt.date = receipt.date;
+        editedReceipt.amount = receipt.amount;
+        editedReceipt.status = receipt.status;
+        editedReceipt.product = receipt.product;
+        sendDataToServer();
+        RenderReceiptTable(...localReceipts);
+    }
+    else if(arguments.length == 0){
+        addReceipt(receipt.invoiceNumber, receipt.clientName, receipt.date, receipt.amount, receipt.status, receipt.product);
+    }
+
     onCloseClick();
 }
 
 function onCloseClick() {
     dialog.classList.add("visually-hidden");
 }
+
+
+
 
 onStart();
