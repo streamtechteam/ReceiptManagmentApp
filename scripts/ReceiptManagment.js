@@ -38,6 +38,9 @@ const resetFields =  document.querySelectorAll(".reset-control");
 //     return document.querySelector(query)
 // }
 function onStart() {
+    document.getElementById("dialogDate").valueAsDate = new Date()
+
+
     dialogProducts.innerHTML = "";
     for (let product of Products) {
         dialogProducts.innerHTML += `<option>${product}</option>`;
