@@ -1,9 +1,10 @@
 class Receipt {
-    constructor(id,invoiceNumber, clientName, date, amount, status, product) {
+    constructor(id,invoiceNumber, clientName, date, duedate, amount, status, product) {
         this.id = id;
         this.invoiceNumber = invoiceNumber;
         this.clientName = clientName;
         this.date = date;
+        this.duedate= duedate;
         this.amount = amount;
         this.status = status;
         this.product = product;
@@ -32,7 +33,6 @@ const receiptTable = document.getElementById("receiptTable");
 const dialog = document.getElementById("receiptDialog");
 const dialogProducts = document.getElementById("dialogProduct");
 const resetFields =  document.querySelectorAll(".reset-control");
-
 // function $ (query){
 //     return document.querySelector(query)
 // }
@@ -101,7 +101,6 @@ function RenderReceiptTable(...receipts) {
 
 function addReceipt(receiptNumber, clientName, date, amount, status, product) {
     let id = crypto.randomUUID().substring(0, 8);
-    console.log(id);
     localReceipts.push(
         new Receipt(id,receiptNumber, clientName, date, amount, status, product),
     );
@@ -113,13 +112,10 @@ function deleteReceipt(id){
     localReceipts = result;
     sendDataToServer();
     RenderReceiptTable(...localReceipts);
-    console.log(localReceipts);
 }
 
 function editReceipt(receiptId){
-    console.log(receiptId);
     let receipt = localReceipts.filter(receipt => receipt.id == receiptId)[0];
-    console.log(receipt);
     setDialogValues(receipt , "Edit Receipt");
     dialog.classList.remove("visually-hidden");
 
@@ -194,15 +190,6 @@ function onCloseClick() {
 }
 
 
-function fixingESlint() {
-    let fix = false
-    if (fix == true) {
-        editReceipt()
-        onAddReceiptClick()
-        onSaveChangesClick()
-        deleteReceipt()
-    }
-}
 
 onStart();
 
@@ -210,4 +197,9 @@ onStart();
 
 
 
-fixingESlint()
+// fixingESlint()
+
+editReceipt()
+onAddReceiptClick()
+onSaveChangesClick()
+deleteReceipt()
